@@ -239,7 +239,7 @@ describe('group', () => {
 
     })
 
-    describe('resolve elements', () => {
+    describe('gsap timeline arguments', () => {
       let spy
 
       const createSpy = (obj, spyMethod) => { spy = sinon.spy(obj, spyMethod) }
@@ -252,16 +252,18 @@ describe('group', () => {
         spy && spy.restore()
       })
 
-      it('should call resolve() on construct(true)', () => {
-        createSpy(group, 'resolve')
-        group.construct(true)
-        expect(spy.calledOnce).to.be.true
+      it('should allow an object as a construct params', () => {
+        const tl = group.construct({repeat: -1})
+
+        expect(tl.repeat()).to.be.equal(-1);
       })
 
-      it('should not call resolve() on construct()', () => {
-        createSpy(group, 'resolve')
-        group.construct()
-        expect(spy.called).to.be.false
+      it('should pause by default', () => {
+        expect(group.construct().paused()).to.be.true
+      })
+
+      it('should allow autoplay', () => {
+        expect(group.construct({paused: false}).paused()).to.be.false
       })
 
     })
