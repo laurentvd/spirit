@@ -237,10 +237,10 @@ class Group extends Emitter {
   /**
    * Construct GSAP timeline
    *
-   * @param   {boolean} resolve elements
+   * @param   {Ojbect} [gsapParams] Optionally pass params to gsap
    * @returns {TimelineMax|TimelineLite}
    */
-  construct(resolve = false) {
+  construct(gsapParams = {}) {
     try {
       if (!gsap.has()) {
         if (debug()) {
@@ -249,10 +249,12 @@ class Group extends Emitter {
         throw new Error('GSAP cannot be found')
       }
 
-      resolve && this.resolve()
+      if (gsapParams.paused !== false) {
+        gsapParams.paused = true;
+      }
 
       if (!this.reset()) {
-        this.timeline = new config.gsap.timeline({ paused: true }) // eslint-disable-line new-cap
+        this.timeline = new config.gsap.timeline(gsapParams) // eslint-disable-line new-cap
       }
 
       this.resolved.each(timeline => {
